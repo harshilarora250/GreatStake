@@ -1,0 +1,669 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>StakeDemo - Casino Gaming Platform</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            color: #fff;
+            min-height: 100vh;
+            padding-bottom: 80px;
+        }
+
+        .header {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 15px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 2px solid #00d4ff;
+        }
+
+        .logo {
+            font-size: 28px;
+            font-weight: bold;
+            background: linear-gradient(90deg, #00d4ff, #0099ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .balance-container {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+        }
+
+        .balance {
+            background: rgba(0, 212, 255, 0.1);
+            padding: 10px 20px;
+            border-radius: 8px;
+            border: 1px solid #00d4ff;
+        }
+
+        .balance-amount {
+            font-size: 20px;
+            font-weight: bold;
+            color: #00d4ff;
+        }
+
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(10px);
+            border-top: 2px solid #00d4ff;
+            display: flex;
+            justify-content: space-around;
+            padding: 15px 0;
+            z-index: 999;
+        }
+
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 5px;
+            cursor: pointer;
+            padding: 10px 20px;
+            border-radius: 10px;
+            transition: all 0.3s;
+            color: #aaa;
+        }
+
+        .nav-item:hover, .nav-item.active {
+            background: rgba(0, 212, 255, 0.1);
+            color: #00d4ff;
+        }
+
+        .nav-icon {
+            font-size: 24px;
+        }
+
+        .nav-label {
+            font-size: 12px;
+        }
+
+        .main-container {
+            max-width: 1200px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+
+        .game-section {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            padding: 30px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .game-title {
+            font-size: 24px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .dice-game {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 30px;
+        }
+
+        .dice-display {
+            width: 150px;
+            height: 150px;
+            background: linear-gradient(135deg, #00d4ff, #0099ff);
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 80px;
+            font-weight: bold;
+            box-shadow: 0 10px 30px rgba(0, 212, 255, 0.3);
+        }
+
+        .bet-controls {
+            width: 100%;
+            max-width: 500px;
+        }
+
+        .control-group {
+            margin-bottom: 20px;
+        }
+
+        .control-label {
+            display: block;
+            margin-bottom: 8px;
+            color: #aaa;
+        }
+
+        .control-input {
+            width: 100%;
+            padding: 12px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 8px;
+            color: #fff;
+            font-size: 16px;
+        }
+
+        .control-input:focus {
+            outline: none;
+            border-color: #00d4ff;
+        }
+
+        .bet-amount-buttons {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .amount-btn {
+            padding: 10px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 6px;
+            color: #fff;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .amount-btn:hover {
+            background: rgba(0, 212, 255, 0.2);
+            border-color: #00d4ff;
+        }
+
+        .roll-btn {
+            width: 100%;
+            padding: 18px;
+            background: linear-gradient(135deg, #00d4ff, #0099ff);
+            border: none;
+            border-radius: 10px;
+            color: #fff;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-top: 20px;
+        }
+
+        .roll-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(0, 212, 255, 0.4);
+        }
+
+        .roll-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .result-message {
+            text-align: center;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 20px;
+            font-weight: bold;
+            display: none;
+        }
+
+        .result-message.win {
+            background: rgba(0, 255, 0, 0.2);
+            border: 1px solid #0f0;
+            color: #0f0;
+            display: block;
+        }
+
+        .result-message.lose {
+            background: rgba(255, 0, 0, 0.2);
+            border: 1px solid #f00;
+            color: #f00;
+            display: block;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: #1a1a2e;
+            padding: 40px;
+            border-radius: 15px;
+            max-width: 500px;
+            width: 90%;
+            border: 2px solid #00d4ff;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        .modal-title {
+            font-size: 24px;
+            margin-bottom: 25px;
+            text-align: center;
+        }
+
+        .payment-methods {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+
+        .payment-method {
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-align: center;
+        }
+
+        .payment-method:hover, .payment-method.selected {
+            border-color: #00d4ff;
+            background: rgba(0, 212, 255, 0.1);
+        }
+
+        .payment-method-icon {
+            font-size: 30px;
+            margin-bottom: 10px;
+        }
+
+        .close-modal {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            padding: 10px 20px;
+            border-radius: 8px;
+            color: #fff;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 15px;
+        }
+
+        .confirm-btn {
+            background: linear-gradient(135deg, #00d4ff, #0099ff);
+            border: none;
+            padding: 15px;
+            border-radius: 8px;
+            color: #fff;
+            font-weight: bold;
+            cursor: pointer;
+            width: 100%;
+            font-size: 16px;
+        }
+
+        .confirm-btn:hover {
+            transform: translateY(-2px);
+        }
+
+        .history {
+            margin-top: 30px;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 10px;
+            padding: 20px;
+        }
+
+        .history-title {
+            margin-bottom: 15px;
+            font-size: 18px;
+        }
+
+        .history-item {
+            padding: 10px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 6px;
+            margin-bottom: 8px;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .transaction-status {
+            padding: 4px 12px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .status-completed {
+            background: rgba(0, 255, 0, 0.2);
+            color: #0f0;
+        }
+
+        .status-pending {
+            background: rgba(255, 165, 0, 0.2);
+            color: #ffa500;
+        }
+
+        /* Loading Screen Styles */
+        .loading-screen {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.95);
+            z-index: 2000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .loading-screen.active {
+            display: flex;
+        }
+
+        .loading-content {
+            text-align: center;
+            max-width: 500px;
+            padding: 40px;
+        }
+
+        .loading-spinner {
+            width: 80px;
+            height: 80px;
+            border: 5px solid rgba(0, 212, 255, 0.2);
+            border-top: 5px solid #00d4ff;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 30px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .loading-text {
+            font-size: 20px;
+            margin-bottom: 15px;
+            color: #00d4ff;
+        }
+
+        .loading-subtext {
+            color: #aaa;
+            font-size: 14px;
+            margin-bottom: 20px;
+        }
+
+        .processing-steps {
+            text-align: left;
+            margin-top: 30px;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+        }
+
+        .step {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 10px 0;
+            color: #666;
+        }
+
+        .step.active {
+            color: #00d4ff;
+        }
+
+        .step.completed {
+            color: #0f0;
+        }
+
+        .step-icon {
+            font-size: 20px;
+        }
+
+        .transaction-code-display {
+            background: rgba(0, 212, 255, 0.1);
+            border: 1px solid #00d4ff;
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 20px;
+        }
+
+        .transaction-code-label {
+            font-size: 12px;
+            color: #aaa;
+            margin-bottom: 5px;
+        }
+
+        .transaction-code {
+            font-size: 18px;
+            font-weight: bold;
+            color: #00d4ff;
+            font-family: monospace;
+            letter-spacing: 2px;
+        }
+
+        .success-checkmark {
+            width: 100px;
+            height: 100px;
+            margin: 0 auto 20px;
+            border: 5px solid #0f0;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 60px;
+            color: #0f0;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="logo">🎲 StakeDemo</div>
+        <div class="balance-container">
+            <div class="balance">
+                <div style="font-size: 12px; color: #aaa;">Balance</div>
+                <div class="balance-amount">$<span id="balance">1000.00</span></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="main-container">
+        <div class="game-section">
+            <h2 class="game-title">🎲 Dice Roll Game</h2>
+            <div class="dice-game">
+                <div class="dice-display" id="diceDisplay">?</div>
+                
+                <div class="bet-controls">
+                    <div class="control-group">
+                        <label class="control-label">Bet Amount ($)</label>
+                        <input type="number" class="control-input" id="betAmount" value="10" min="1" step="1">
+                        <div class="bet-amount-buttons">
+                            <button class="amount-btn" onclick="setBetAmount(10)">$10</button>
+                            <button class="amount-btn" onclick="setBetAmount(50)">$50</button>
+                            <button class="amount-btn" onclick="setBetAmount(100)">$100</button>
+                            <button class="amount-btn" onclick="setBetAmount(500)">$500</button>
+                        </div>
+                    </div>
+
+                    <div class="control-group">
+                        <label class="control-label">Predict Number (1-6)</label>
+                        <input type="number" class="control-input" id="predictNumber" value="6" min="1" max="6">
+                    </div>
+
+                    <button class="roll-btn" onclick="rollDice()" id="rollBtn">Roll Dice</button>
+                    
+                    <div class="result-message" id="resultMessage"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="history">
+            <h3 class="history-title">Recent Transactions</h3>
+            <div id="transactionHistory"></div>
+        </div>
+    </div>
+
+    <!-- Bottom Navigation -->
+    <div class="bottom-nav">
+        <div class="nav-item active" onclick="switchTab('games')">
+            <div class="nav-icon">🎮</div>
+            <div class="nav-label">Games</div>
+        </div>
+        <div class="nav-item" onclick="openDepositModal()">
+            <div class="nav-icon">💰</div>
+            <div class="nav-label">Deposit</div>
+        </div>
+        <div class="nav-item" onclick="openWithdrawModal()">
+            <div class="nav-icon">💸</div>
+            <div class="nav-label">Withdraw</div>
+        </div>
+        <div class="nav-item" onclick="switchTab('wallet')">
+            <div class="nav-icon">👛</div>
+            <div class="nav-label">Wallet</div>
+        </div>
+    </div>
+
+    <!-- Deposit Modal -->
+    <div class="modal" id="depositModal">
+        <div class="modal-content">
+            <h2 class="modal-title">Deposit Funds</h2>
+            
+            <div class="payment-methods">
+                <div class="payment-method selected" onclick="selectPaymentMethod('bitcoin', this)">
+                    <div class="payment-method-icon">₿</div>
+                    <div>Bitcoin</div>
+                </div>
+                <div class="payment-method" onclick="selectPaymentMethod('ethereum', this)">
+                    <div class="payment-method-icon">Ξ</div>
+                    <div>Ethereum</div>
+                </div>
+                <div class="payment-method" onclick="selectPaymentMethod('paypal', this)">
+                    <div class="payment-method-icon">💙</div>
+                    <div>PayPal</div>
+                </div>
+                <div class="payment-method" onclick="selectPaymentMethod('bank', this)">
+                    <div class="payment-method-icon">🏦</div>
+                    <div>Bank Transfer</div>
+                </div>
+                <div class="payment-method" onclick="selectPaymentMethod('card', this)">
+                    <div class="payment-method-icon">💳</div>
+                    <div>Credit Card</div>
+                </div>
+                <div class="payment-method" onclick="selectPaymentMethod('usdt', this)">
+                    <div class="payment-method-icon">💵</div>
+                    <div>USDT</div>
+                </div>
+            </div>
+
+            <div class="control-group">
+                <label class="control-label">Amount ($)</label>
+                <input type="number" class="control-input" id="depositAmount" value="100" min="10">
+            </div>
+
+            <button class="confirm-btn" onclick="processDeposit()">Confirm Deposit</button>
+            <button class="close-modal" onclick="closeModal('depositModal')">Cancel</button>
+        </div>
+    </div>
+
+    <!-- Withdraw Modal -->
+    <div class="modal" id="withdrawModal">
+        <div class="modal-content">
+            <h2 class="modal-title">Withdraw Funds</h2>
+            
+            <div class="payment-methods">
+                <div class="payment-method selected" onclick="selectPaymentMethod('bitcoin', this)">
+                    <div class="payment-method-icon">₿</div>
+                    <div>Bitcoin</div>
+                </div>
+                <div class="payment-method" onclick="selectPaymentMethod('ethereum', this)">
+                    <div class="payment-method-icon">Ξ</div>
+                    <div>Ethereum</div>
+                </div>
+                <div class="payment-method" onclick="selectPaymentMethod('paypal', this)">
+                    <div class="payment-method-icon">💙</div>
+                    <div>PayPal</div>
+                </div>
+                <div class="payment-method" onclick="selectPaymentMethod('bank', this)">
+                    <div class="payment-method-icon">🏦</div>
+                    <div>Bank Transfer</div>
+                </div>
+            </div>
+
+            <div class="control-group">
+                <label class="control-label">Amount ($)</label>
+                <input type="number" class="control-input" id="withdrawAmount" value="50" min="10">
+            </div>
+
+            <button class="confirm-btn" onclick="processWithdraw()">Confirm Withdrawal</button>
+            <button class="close-modal" onclick="closeModal('withdrawModal')">Cancel</button>
+        </div>
+    </div>
+
+    <!-- Loading Screen -->
+    <div class="loading-screen" id="loadingScreen">
+        <div class="loading-content" id="loadingContent">
+            <div class="loading-spinner"></div>
+            <div class="loading-text" id="loadingText">Processing your deposit...</div>
+            <div class="loading-subtext" id="loadingSubtext">Please wait while we verify your transaction</div>
+            
+            <div class="processing-steps" id="processingSteps">
+                <div class="step" id="step1">
+                    <div class="step-icon">⏳</div>
+                    <div>Connecting to payment gateway...</div>
+                </div>
+                <div class="step" id="step2">
+                    <div class="step-icon">🔐</div>
+                    <div>Verifying transaction...</div>
+                </div>
+                <div class="step" id="step3">
+                    <div class="step-icon">💎</div>
+                    <div>Processing payment...</div>
+                </div>
+                <div class="step" id="step4">
+                    <div class="step-icon">✅</div>
+                    <div>Updating your balance...</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let balance = 1000;
+        let selectedPaymentMethod = 'bitcoin';
+        let transactions = [];
+
+        function updateBalance() {
+            document.getElementById('balance').textContent = balance.toFixed(2);
+        }
+
+        function setBetAmount(amount) {
+            document.getElementById('betAmount').value = amount;
+        }
+
+        function openDepositModal() {
+            document.getElementById('depositModal').classList.add('active');
+        }
+
+        function openWithdrawModal() {
+            document.getElementById('withdrawModal').classList.add('active');
+        }
+
+        function closeModal(modalId
