@@ -700,4 +700,639 @@
             <div class="game-section">
                 <h2 class="game-title">🎲 Dice Roll Game</h2>
                 <div class="dice-game">
-                   
+                    <div class="dice-display" id="diceDisplay">?</div>
+                    
+                    <div class="bet-controls">
+                        <div class="control-group">
+                            <label class="control-label">Bet Amount ($)</label>
+                            <input type="number" class="control-input" id="betAmount" value="10" min="1" step="1">
+                            <div class="bet-amount-buttons">
+                                <button class="amount-btn" onclick="setBetAmount(10)">$10</button>
+                                <button class="amount-btn" onclick="setBetAmount(50)">$50</button>
+                                <button class="amount-btn" onclick="setBetAmount(100)">$100</button>
+                                <button class="amount-btn" onclick="setBetAmount(500)">$500</button>
+                            </div>
+                        </div>
+
+                        <div class="control-group">
+                            <label class="control-label">Predict Number (1-6)</label>
+                            <input type="number" class="control-input" id="predictNumber" value="6" min="1" max="6">
+                        </div>
+
+                        <button class="roll-btn" onclick="rollDice()" id="rollBtn">Roll Dice 🎲</button>
+                        
+                        <div class="result-message" id="resultMessage"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="history">
+                <h3 class="history-title">📜 Recent Transactions</h3>
+                <div id="transactionHistory"></div>
+            </div>
+        </div>
+
+        <!-- Wallet Section -->
+        <div class="section" id="walletSection">
+            <div class="game-section">
+                <h2 class="game-title">💰 My Wallet</h2>
+                
+                <div class="wallet-overview">
+                    <div class="wallet-card">
+                        <div class="wallet-card-title">Total Balance</div>
+                        <div class="wallet-card-value">$<span id="walletBalance">1000.00</span></div>
+                    </div>
+                    
+                    <div class="wallet-card">
+                        <div class="wallet-card-title">Total Deposited</div>
+                        <div class="wallet-card-value">$<span id="totalDeposited">0.00</span></div>
+                    </div>
+                    
+                    <div class="wallet-card">
+                        <div class="wallet-card-title">Total Withdrawn</div>
+                        <div class="wallet-card-value">$<span id="totalWithdrawn">0.00</span></div>
+                    </div>
+                    
+                    <div class="wallet-card">
+                        <div class="wallet-card-title">Total Winnings</div>
+                        <div class="wallet-card-value" style="background: linear-gradient(90deg, #00ff88, #00d4ff); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">
+                            $<span id="totalWinnings">0.00</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="wallet-actions">
+                    <button class="wallet-action-btn" onclick="openDepositModal()">
+                        💰 Deposit Funds
+                    </button>
+                    <button class="wallet-action-btn" onclick="openWithdrawModal()">
+                        💸 Withdraw Funds
+                    </button>
+                </div>
+            </div>
+
+            <div class="history">
+                <h3 class="history-title">📊 All Transactions</h3>
+                <div id="walletHistory"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bottom Navigation -->
+    <div class="bottom-nav">
+        <div class="nav-item active" onclick="switchTab('games')" data-tab="games">
+            <div class="nav-icon">🎮</div>
+            <div class="nav-label">Games</div>
+        </div>
+        <div class="nav-item" onclick="openDepositModal()">
+            <div class="nav-icon">💰</div>
+            <div class="nav-label">Deposit</div>
+        </div>
+        <div class="nav-item" onclick="openWithdrawModal()">
+            <div class="nav-icon">💸</div>
+            <div class="nav-label">Withdraw</div>
+        </div>
+        <div class="nav-item" onclick="switchTab('wallet')" data-tab="wallet">
+            <div class="nav-icon">👛</div>
+            <div class="nav-label">Wallet</div>
+        </div>
+    </div>
+
+    <!-- Deposit Modal -->
+    <div class="modal" id="depositModal">
+        <div class="modal-content">
+            <h2 class="modal-title">💰 Deposit Funds</h2>
+            
+            <div class="payment-methods">
+                <div class="payment-method selected" onclick="selectPaymentMethod('bitcoin', this)">
+                    <div class="payment-method-icon">₿</div>
+                    <div>Bitcoin</div>
+                </div>
+                <div class="payment-method" onclick="selectPaymentMethod('ethereum', this)">
+                    <div class="payment-method-icon">Ξ</div>
+                    <div>Ethereum</div>
+                </div>
+                <div class="payment-method" onclick="selectPaymentMethod('paypal', this)">
+                    <div class="payment-method-icon">💙</div>
+                    <div>PayPal</div>
+                </div>
+                <div class="payment-method" onclick="selectPaymentMethod('bank', this)">
+                    <div class="payment-method-icon">🏦</div>
+                    <div>Bank Transfer</div>
+                </div>
+                <div class="payment-method" onclick="selectPaymentMethod('card', this)">
+                    <div class="payment-method-icon">💳</div>
+                    <div>Credit Card</div>
+                </div>
+                <div class="payment-method" onclick="selectPaymentMethod('usdt', this)">
+                    <div class="payment-method-icon">💵</div>
+                    <div>USDT</div>
+                </div>
+            </div>
+
+            <div class="control-group">
+                <label class="control-label">Amount ($)</label>
+                <input type="number" class="control-input" id="depositAmount" value="100" min="10">
+            </div>
+
+            <button class="confirm-btn" onclick="processDeposit()">Confirm Deposit</button>
+            <button class="close-modal" onclick="closeModal('depositModal')">Cancel</button>
+        </div>
+    </div>
+
+    <!-- Withdraw Modal -->
+    <div class="modal" id="withdrawModal">
+        <div class="modal-content">
+            <h2 class="modal-title">💸 Withdraw Funds</h2>
+            
+            <div class="payment-methods">
+                <div class="payment-method selected" onclick="selectPaymentMethod('bitcoin', this)">
+                    <div class="payment-method-icon">₿</div>
+                    <div>Bitcoin</div>
+                </div>
+                <div class="payment-method" onclick="selectPaymentMethod('ethereum', this)">
+                    <div class="payment-method-icon">Ξ</div>
+                    <div>Ethereum</div>
+                </div>
+                <div class="payment-method" onclick="selectPaymentMethod('paypal', this)">
+                    <div class="payment-method-icon">💙</div>
+                    <div>PayPal</div>
+                </div>
+                <div class="payment-method" onclick="selectPaymentMethod('bank', this)">
+                    <div class="payment-method-icon">🏦</div>
+                    <div>Bank Transfer</div>
+                </div>
+            </div>
+
+            <div class="control-group">
+                <label class="control-label">Amount ($)</label>
+                <input type="number" class="control-input" id="withdrawAmount" value="50" min="10">
+            </div>
+
+            <button class="confirm-btn" onclick="processWithdraw()">Confirm Withdrawal</button>
+            <button class="close-modal" onclick="closeModal('withdrawModal')">Cancel</button>
+        </div>
+    </div>
+
+    <!-- Loading Screen -->
+    <div class="loading-screen" id="loadingScreen">
+        <div class="loading-content" id="loadingContent">
+            <div class="loading-spinner"></div>
+            <div class="loading-text" id="loadingText">Processing your deposit...</div>
+            <div class="loading-subtext" id="loadingSubtext">Please wait while we verify your transaction</div>
+            
+            <div class="processing-steps" id="processingSteps">
+                <div class="step" id="step1">
+                    <div class="step-icon">⏳</div>
+                    <div>Connecting to payment gateway...</div>
+                </div>
+                <div class="step" id="step2">
+                    <div class="step-icon">🔐</div>
+                    <div>Verifying transaction...</div>
+                </div>
+                <div class="step" id="step3">
+                    <div class="step-icon">💎</div>
+                    <div>Processing payment...</div>
+                </div>
+                <div class="step" id="step4">
+                    <div class="step-icon">✅</div>
+                    <div>Updating your balance...</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Load data from localStorage
+        let balance = parseFloat(localStorage.getItem('greatstake_balance')) || 1000;
+        let selectedPaymentMethod = 'bitcoin';
+        let transactions = JSON.parse(localStorage.getItem('greatstake_transactions')) || [];
+        let stats = JSON.parse(localStorage.getItem('greatstake_stats')) || {
+            totalDeposited: 0,
+            totalWithdrawn: 0,
+            totalWinnings: 0
+        };
+
+        // Save data to localStorage
+        function saveData() {
+            localStorage.setItem('greatstake_balance', balance);
+            localStorage.setItem('greatstake_transactions', JSON.stringify(transactions));
+            localStorage.setItem('greatstake_stats', JSON.stringify(stats));
+        }
+
+        function updateBalance() {
+            document.getElementById('balance').textContent = balance.toFixed(2);
+            document.getElementById('walletBalance').textContent = balance.toFixed(2);
+        }
+
+        function updateStats() {
+            document.getElementById('totalDeposited').textContent = stats.totalDeposited.toFixed(2);
+            document.getElementById('totalWithdrawn').textContent = stats.totalWithdrawn.toFixed(2);
+            document.getElementById('totalWinnings').textContent = stats.totalWinnings.toFixed(2);
+        }
+
+        function setBetAmount(amount) {
+            document.getElementById('betAmount').value = amount;
+        }
+
+        function openDepositModal() {
+            document.getElementById('depositModal').classList.add('active');
+        }
+
+        function openWithdrawModal() {
+            document.getElementById('withdrawModal').classList.add('active');
+        }
+
+        function closeModal(modalId) {
+            document.getElementById(modalId).classList.remove('active');
+        }
+
+        function selectPaymentMethod(method, element) {
+            selectedPaymentMethod = method;
+            const modal = element.closest('.modal-content');
+            modal.querySelectorAll('.payment-method').forEach(el => {
+                el.classList.remove('selected');
+            });
+            element.classList.add('selected');
+        }
+
+        function generateTransactionCode() {
+            const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+            let code = '';
+            for (let i = 0; i < 3; i++) {
+                for (let j = 0; j < 4; j++) {
+                    code += chars.charAt(Math.floor(Math.random() * chars.length));
+                }
+                if (i < 2) code += '-';
+            }
+            return code;
+        }
+
+        function switchTab(tab) {
+            // Remove active from all nav items
+            document.querySelectorAll('.nav-item').forEach(item => {
+                item.classList.remove('active');
+            });
+            
+            // Add active to clicked nav item
+            document.querySelector(`[data-tab="${tab}"]`).classList.add('active');
+            
+            // Hide all sections
+            document.querySelectorAll('.section').forEach(section => {
+                section.classList.remove('active');
+            });
+            
+            // Show selected section
+            if (tab === 'games') {
+                document.getElementById('gamesSection').classList.add('active');
+            } else if (tab === 'wallet') {
+                document.getElementById('walletSection').classList.add('active');
+                updateWalletHistory();
+            }
+        }
+
+        async function processDeposit() {
+            const amount = parseFloat(document.getElementById('depositAmount').value);
+            if (amount < 10) {
+                alert('Minimum deposit amount is $10');
+                return;
+            }
+
+            closeModal('depositModal');
+            
+            const transactionCode = generateTransactionCode();
+            const loadingScreen = document.getElementById('loadingScreen');
+            loadingScreen.classList.add('active');
+
+            // Step 1
+            document.getElementById('step1').classList.add('active');
+            await sleep(1500);
+            document.getElementById('step1').classList.remove('active');
+            document.getElementById('step1').classList.add('completed');
+            document.getElementById('step1').querySelector('.step-icon').textContent = '✓';
+
+            // Step 2
+            document.getElementById('step2').classList.add('active');
+            await sleep(1800);
+            document.getElementById('step2').classList.remove('active');
+            document.getElementById('step2').classList.add('completed');
+            document.getElementById('step2').querySelector('.step-icon').textContent = '✓';
+
+            // Step 3
+            document.getElementById('step3').classList.add('active');
+            await sleep(2000);
+            document.getElementById('step3').classList.remove('active');
+            document.getElementById('step3').classList.add('completed');
+            document.getElementById('step3').querySelector('.step-icon').textContent = '✓';
+
+            // Step 4
+            document.getElementById('step4').classList.add('active');
+            await sleep(1200);
+            document.getElementById('step4').classList.remove('active');
+            document.getElementById('step4').classList.add('completed');
+            document.getElementById('step4').querySelector('.step-icon').textContent = '✓';
+
+            // Show success screen
+            const loadingContent = document.getElementById('loadingContent');
+            loadingContent.innerHTML = `
+                <div class="success-checkmark">✓</div>
+                <div class="loading-text" style="color: #0f0;">Deposit Successful!</div>
+                <div class="loading-subtext">Your funds have been added to your account</div>
+                
+                <div class="transaction-code-display">
+                    <div class="transaction-code-label">Transaction ID</div>
+                    <div class="transaction-code">${transactionCode}</div>
+                </div>
+
+                <div style="margin-top: 20px; padding: 15px; background: rgba(255,255,255,0.05); border-radius: 8px;">
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
+                        <span style="color: #aaa;">Amount:</span>
+                        <span style="color: #0f0; font-weight: bold;">+$${amount.toFixed(2)}</span>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
+                        <span style="color: #aaa;">Method:</span>
+                        <span>${selectedPaymentMethod.toUpperCase()}</span>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
+                        <span style="color: #aaa;">Status:</span>
+                        <span style="color: #0f0;">Completed</span>
+                    </div>
+                    <div style="display: flex; justify-content: space-between;">
+                        <span style="color: #aaa;">New Balance:</span>
+                        <span style="color: #00d4ff; font-weight: bold;">$${(balance + amount).toFixed(2)}</span>
+                    </div>
+                </div>
+
+                <button class="confirm-btn" onclick="closeLoadingScreen()" style="margin-top: 25px;">Continue</button>
+            `;
+
+            balance += amount;
+            stats.totalDeposited += amount;
+            updateBalance();
+            updateStats();
+            addTransaction('Deposit', amount, 'completed', selectedPaymentMethod, transactionCode);
+            saveData();
+        }
+
+        async function processWithdraw() {
+            const amount = parseFloat(document.getElementById('withdrawAmount').value);
+            if (amount < 10) {
+                alert('Minimum withdrawal amount is $10');
+                return;
+            }
+            if (amount > balance) {
+                alert('Insufficient balance!');
+                return;
+            }
+
+            closeModal('withdrawModal');
+            
+            const transactionCode = generateTransactionCode();
+            const loadingScreen = document.getElementById('loadingScreen');
+            loadingScreen.classList.add('active');
+
+            document.getElementById('loadingText').textContent = 'Processing your withdrawal...';
+
+            // Steps
+            document.getElementById('step1').classList.add('active');
+            document.getElementById('step1').querySelector('div:last-child').textContent = 'Verifying withdrawal request...';
+            await sleep(1500);
+            document.getElementById('step1').classList.remove('active');
+            document.getElementById('step1').classList.add('completed');
+            document.getElementById('step1').querySelector('.step-icon').textContent = '✓';
+
+            document.getElementById('step2').classList.add('active');
+            document.getElementById('step2').querySelector('div:last-child').textContent = 'Checking account balance...';
+            await sleep(1300);
+            document.getElementById('step2').classList.remove('active');
+            document.getElementById('step2').classList.add('completed');
+            document.getElementById('step2').querySelector('.step-icon').textContent = '✓';
+
+            document.getElementById('step3').classList.add('active');
+            document.getElementById('step3').querySelector('div:last-child').textContent = 'Initiating transfer...';
+            await sleep(1800);
+            document.getElementById('step3').classList.remove('active');
+            document.getElementById('step3').classList.add('completed');
+            document.getElementById('step3').querySelector('.step-icon').textContent = '✓';
+
+            document.getElementById('step4').classList.add('active');
+            document.getElementById('step4').querySelector('div:last-child').textContent = 'Updating your balance...';
+            await sleep(1000);
+            document.getElementById('step4').classList.remove('active');
+            document.getElementById('step4').classList.add('completed');
+            document.getElementById('step4').querySelector('.step-icon').textContent = '✓';
+
+            // Show success screen
+            const loadingContent = document.getElementById('loadingContent');
+            loadingContent.innerHTML = `
+                <div class="success-checkmark">✓</div>
+                <div class="loading-text" style="color: #ffa500;">Withdrawal Initiated!</div>
+                <div class="loading-subtext">Your withdrawal is being processed</div>
+                
+                <div class="transaction-code-display">
+                    <div class="transaction-code-label">Transaction ID</div>
+                    <div class="transaction-code">${transactionCode}</div>
+                </div>
+
+                <div style="margin-top: 20px; padding: 15px; background: rgba(255,255,255,0.05); border-radius: 8px;">
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
+                        <span style="color: #aaa;">Amount:</span>
+                        <span style="color: #f00; font-weight: bold;">-$${amount.toFixed(2)}</span>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
+                        <span style="color: #aaa;">Method:</span>
+                        <span>${selectedPaymentMethod.toUpperCase()}</span>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
+                        <span style="color: #aaa;">Status:</span>
+                        <span style="color: #ffa500;">Processing (1-3 business days)</span>
+                    </div>
+                    <div style="display: flex; justify-content: space-between;">
+                        <span style="color: #aaa;">New Balance:</span>
+                        <span style="color: #00d4ff; font-weight: bold;">$${(balance - amount).toFixed(2)}</span>
+                    </div>
+                </div>
+
+                <button class="confirm-btn" onclick="closeLoadingScreen()" style="margin-top: 25px;">Continue</button>
+            `;
+
+            balance -= amount;
+            stats.totalWithdrawn += amount;
+            updateBalance();
+            updateStats();
+            addTransaction('Withdrawal', -amount, 'pending', selectedPaymentMethod, transactionCode);
+            saveData();
+        }
+
+        function closeLoadingScreen() {
+            document.getElementById('loadingScreen').classList.remove('active');
+            
+            // Reset loading screen for next use
+            setTimeout(() => {
+                const loadingContent = document.getElementById('loadingContent');
+                loadingContent.innerHTML = `
+                    <div class="loading-spinner"></div>
+                    <div class="loading-text" id="loadingText">Processing your deposit...</div>
+                    <div class="loading-subtext" id="loadingSubtext">Please wait while we verify your transaction</div>
+                    
+                    <div class="processing-steps" id="processingSteps">
+                        <div class="step" id="step1">
+                            <div class="step-icon">⏳</div>
+                            <div>Connecting to payment gateway...</div>
+                        </div>
+                        <div class="step" id="step2">
+                            <div class="step-icon">🔐</div>
+                            <div>Verifying transaction...</div>
+                        </div>
+                        <div class="step" id="step3">
+                            <div class="step-icon">💎</div>
+                            <div>Processing payment...</div>
+                        </div>
+                        <div class="step" id="step4">
+                            <div class="step-icon">✅</div>
+                            <div>Updating your balance...</div>
+                        </div>
+                    </div>
+                `;
+            }, 500);
+        }
+
+        function sleep(ms) {
+            return new Promise(resolve => setTimeout(resolve, ms));
+        }
+
+        function rollDice() {
+            const betAmount = parseFloat(document.getElementById('betAmount').value);
+            const predictNumber = parseInt(document.getElementById('predictNumber').value);
+            
+            if (betAmount > balance) {
+                alert('Insufficient balance!');
+                return;
+            }
+
+            if (predictNumber < 1 || predictNumber > 6) {
+                alert('Please predict a number between 1 and 6');
+                return;
+            }
+
+            const rollBtn = document.getElementById('rollBtn');
+            rollBtn.disabled = true;
+
+            // Animate dice roll
+            let rolls = 0;
+            const rollInterval = setInterval(() => {
+                const randomNum = Math.floor(Math.random() * 6) + 1;
+                document.getElementById('diceDisplay').textContent = randomNum;
+                rolls++;
+                
+                if (rolls >= 10) {
+                    clearInterval(rollInterval);
+                    
+                    const finalRoll = Math.floor(Math.random() * 6) + 1;
+                    document.getElementById('diceDisplay').textContent = finalRoll;
+                    
+                    const resultMsg = document.getElementById('resultMessage');
+                    const transactionCode = generateTransactionCode();
+                    
+                    if (finalRoll === predictNumber) {
+                        const winAmount = betAmount * 5;
+                        balance += winAmount;
+                        stats.totalWinnings += winAmount;
+                        resultMsg.className = 'result-message win';
+                        resultMsg.textContent = `🎉 YOU WIN! +$${winAmount.toFixed(2)}`;
+                        addTransaction('Dice Win', winAmount, 'completed', 'game', transactionCode);
+                    } else {
+                        balance -= betAmount;
+                        resultMsg.className = 'result-message lose';
+                        resultMsg.textContent = `😔 You Lost -$${betAmount.toFixed(2)}`;
+                        addTransaction('Dice Loss', -betAmount, 'completed', 'game', transactionCode);
+                    }
+                    
+                    updateBalance();
+                    updateStats();
+                    saveData();
+                    rollBtn.disabled = false;
+                    
+                    setTimeout(() => {
+                        resultMsg.style.display = 'none';
+                    }, 5000);
+                }
+            }, 100);
+        }
+
+        function addTransaction(type, amount, status, method, transactionCode) {
+            const transaction = {
+                type: type,
+                amount: amount,
+                status: status,
+                method: method,
+                code: transactionCode,
+                time: new Date().toLocaleString()
+            };
+            
+            transactions.unshift(transaction);
+            if (transactions.length > 100) transactions.pop(); // Keep last 100
+            
+            updateTransactionHistory();
+            saveData();
+        }
+
+        function updateTransactionHistory() {
+            const historyDiv = document.getElementById('transactionHistory');
+            if (transactions.length === 0) {
+                historyDiv.innerHTML = '<div style="text-align: center; color: #666; padding: 20px;">No transactions yet</div>';
+                return;
+            }
+            
+            // Show last 10 transactions
+            const recentTransactions = transactions.slice(0, 10);
+            historyDiv.innerHTML = recentTransactions.map(t => `
+                <div class="history-item">
+                    <div>
+                        <div style="font-weight: bold;">${t.type}</div>
+                        <div style="font-size: 11px; color: #666; font-family: monospace;">${t.code}</div>
+                        <div style="font-size: 12px; color: #888;">${t.time} • ${t.method}</div>
+                    </div>
+                    <div style="text-align: right;">
+                        <div style="font-weight: bold; color: ${t.amount > 0 ? '#0f0' : '#f00'};">
+                            ${t.amount > 0 ? '+' : ''}$${Math.abs(t.amount).toFixed(2)}
+                        </div>
+                        <span class="transaction-status status-${t.status}">${t.status}</span>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function updateWalletHistory() {
+            const historyDiv = document.getElementById('walletHistory');
+            if (transactions.length === 0) {
+                historyDiv.innerHTML = '<div style="text-align: center; color: #666; padding: 20px;">No transactions yet</div>';
+                return;
+            }
+            
+            historyDiv.innerHTML = transactions.map(t => `
+                <div class="history-item">
+                    <div>
+                        <div style="font-weight: bold;">${t.type}</div>
+                        <div style="font-size: 11px; color: #666; font-family: monospace;">${t.code}</div>
+                        <div style="font-size: 12px; color: #888;">${t.time} • ${t.method}</div>
+                    </div>
+                    <div style="text-align: right;">
+                        <div style="font-weight: bold; color: ${t.amount > 0 ? '#0f0' : '#f00'};">
+                            ${t.amount > 0 ? '+' : ''}$${Math.abs(t.amount).toFixed(2)}
+                        </div>
+                        <span class="transaction-status status-${t.status}">${t.status}</span>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Initialize on load
+        window.addEventListener('DOMContentLoaded', () => {
+            updateBalance();
+            updateStats();
+            updateTransactionHistory();
+        });
+    </script>
+</body>
+</html>
