@@ -13,7 +13,7 @@
 
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-            background: linear-gradient(135deg, #0f0f23 0%, #1a1a3e 50%, #0f0f23 100%);
+            background: #0a192f;
             color: #fff;
             min-height: 100vh;
             padding-bottom: 80px;
@@ -21,6 +21,7 @@
             overflow-x: hidden;
         }
 
+        /* Animated background */
         body::before {
             content: '';
             position: fixed;
@@ -28,39 +29,102 @@
             left: 0;
             right: 0;
             bottom: 0;
-            background: radial-gradient(circle at 20% 50%, rgba(0, 212, 255, 0.05) 0%, transparent 50%),
-                        radial-gradient(circle at 80% 80%, rgba(255, 0, 255, 0.05) 0%, transparent 50%);
+            background: 
+                radial-gradient(circle at 20% 50%, rgba(16, 185, 129, 0.15) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(59, 130, 246, 0.15) 0%, transparent 50%),
+                radial-gradient(circle at 50% 20%, rgba(34, 211, 238, 0.1) 0%, transparent 40%);
+            pointer-events: none;
+            z-index: 0;
+            animation: backgroundShift 20s ease infinite;
+        }
+
+        @keyframes backgroundShift {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.8; }
+        }
+
+        /* Floating orbs */
+        .orb {
+            position: fixed;
+            border-radius: 50%;
+            filter: blur(60px);
+            opacity: 0.3;
             pointer-events: none;
             z-index: 0;
         }
 
+        .orb1 {
+            width: 400px;
+            height: 400px;
+            background: linear-gradient(135deg, #10b981, #3b82f6);
+            top: -200px;
+            left: -200px;
+            animation: float1 25s ease-in-out infinite;
+        }
+
+        .orb2 {
+            width: 300px;
+            height: 300px;
+            background: linear-gradient(135deg, #22d3ee, #10b981);
+            bottom: -150px;
+            right: -150px;
+            animation: float2 20s ease-in-out infinite;
+        }
+
+        .orb3 {
+            width: 350px;
+            height: 350px;
+            background: linear-gradient(135deg, #3b82f6, #22d3ee);
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            animation: float3 30s ease-in-out infinite;
+        }
+
+        @keyframes float1 {
+            0%, 100% { transform: translate(0, 0) rotate(0deg); }
+            33% { transform: translate(100px, 100px) rotate(120deg); }
+            66% { transform: translate(-50px, 150px) rotate(240deg); }
+        }
+
+        @keyframes float2 {
+            0%, 100% { transform: translate(0, 0) rotate(0deg); }
+            50% { transform: translate(-100px, -100px) rotate(180deg); }
+        }
+
+        @keyframes float3 {
+            0%, 100% { transform: translate(-50%, -50%) scale(1); }
+            50% { transform: translate(-50%, -50%) scale(1.2); }
+        }
+
         .header {
-            background: rgba(0, 0, 0, 0.6);
-            backdrop-filter: blur(20px);
+            background: rgba(15, 23, 42, 0.6);
+            backdrop-filter: blur(20px) saturate(180%);
+            -webkit-backdrop-filter: blur(20px) saturate(180%);
             padding: 20px 30px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            border-bottom: 2px solid transparent;
-            border-image: linear-gradient(90deg, #00d4ff, #ff00ff, #00d4ff) 1;
+            border-bottom: 1px solid rgba(16, 185, 129, 0.2);
             position: relative;
             z-index: 10;
-            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.3);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3),
+                        inset 0 1px 0 rgba(255, 255, 255, 0.05);
         }
 
         .logo {
             font-size: 32px;
             font-weight: 900;
-            background: linear-gradient(135deg, #00d4ff, #ff00ff, #00d4ff);
+            background: linear-gradient(135deg, #10b981, #22d3ee, #3b82f6);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-size: 200% 200%;
-            animation: gradientShift 3s ease infinite;
-            text-shadow: 0 0 30px rgba(0, 212, 255, 0.5);
+            animation: gradientFlow 4s ease infinite;
+            filter: drop-shadow(0 0 20px rgba(16, 185, 129, 0.5));
             letter-spacing: 2px;
         }
 
-        @keyframes gradientShift {
+        @keyframes gradientFlow {
             0%, 100% { background-position: 0% 50%; }
             50% { background-position: 100% 50%; }
         }
@@ -72,20 +136,23 @@
         }
 
         .balance {
-            background: linear-gradient(135deg, rgba(0, 212, 255, 0.15), rgba(255, 0, 255, 0.15));
+            background: rgba(16, 185, 129, 0.1);
+            backdrop-filter: blur(10px) saturate(180%);
+            -webkit-backdrop-filter: blur(10px) saturate(180%);
             padding: 12px 24px;
-            border-radius: 12px;
-            border: 2px solid rgba(0, 212, 255, 0.3);
-            box-shadow: 0 8px 32px rgba(0, 212, 255, 0.2);
-            backdrop-filter: blur(10px);
+            border-radius: 16px;
+            border: 1px solid rgba(16, 185, 129, 0.3);
+            box-shadow: 0 8px 32px rgba(16, 185, 129, 0.15),
+                        inset 0 1px 0 rgba(255, 255, 255, 0.1);
         }
 
         .balance-amount {
             font-size: 24px;
             font-weight: 900;
-            background: linear-gradient(90deg, #00d4ff, #00ff88);
+            background: linear-gradient(90deg, #10b981, #22d3ee);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
+            filter: drop-shadow(0 0 10px rgba(16, 185, 129, 0.3));
         }
 
         .bottom-nav {
@@ -93,15 +160,16 @@
             bottom: 0;
             left: 0;
             right: 0;
-            background: rgba(0, 0, 0, 0.8);
-            backdrop-filter: blur(20px);
-            border-top: 2px solid transparent;
-            border-image: linear-gradient(90deg, #00d4ff, #ff00ff, #00d4ff) 1;
+            background: rgba(15, 23, 42, 0.8);
+            backdrop-filter: blur(20px) saturate(180%);
+            -webkit-backdrop-filter: blur(20px) saturate(180%);
+            border-top: 1px solid rgba(16, 185, 129, 0.2);
             display: flex;
             justify-content: space-around;
             padding: 15px 0;
             z-index: 999;
-            box-shadow: 0 -4px 30px rgba(0, 0, 0, 0.5);
+            box-shadow: 0 -8px 32px rgba(0, 0, 0, 0.4),
+                        inset 0 1px 0 rgba(255, 255, 255, 0.05);
         }
 
         .nav-item {
@@ -111,25 +179,50 @@
             gap: 5px;
             cursor: pointer;
             padding: 10px 20px;
-            border-radius: 12px;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            color: #888;
+            border-radius: 16px;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            color: #64748b;
             position: relative;
         }
 
+        .nav-item::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border-radius: 16px;
+            padding: 1px;
+            background: linear-gradient(135deg, transparent, transparent);
+            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor;
+            mask-composite: exclude;
+            opacity: 0;
+            transition: opacity 0.4s;
+        }
+
         .nav-item:hover {
-            background: rgba(0, 212, 255, 0.1);
-            color: #00d4ff;
+            background: rgba(16, 185, 129, 0.1);
+            color: #10b981;
             transform: translateY(-3px);
         }
 
+        .nav-item:hover::before {
+            opacity: 1;
+            background: linear-gradient(135deg, #10b981, #22d3ee);
+        }
+
         .nav-item.active {
-            background: linear-gradient(135deg, rgba(0, 212, 255, 0.2), rgba(255, 0, 255, 0.2));
-            color: #00d4ff;
-            box-shadow: 0 4px 20px rgba(0, 212, 255, 0.3);
+            background: rgba(16, 185, 129, 0.15);
+            color: #10b981;
+            box-shadow: 0 8px 32px rgba(16, 185, 129, 0.2),
+                        inset 0 1px 0 rgba(255, 255, 255, 0.1);
         }
 
         .nav-item.active::before {
+            opacity: 1;
+            background: linear-gradient(135deg, #10b981, #22d3ee);
+        }
+
+        .nav-item.active::after {
             content: '';
             position: absolute;
             top: -2px;
@@ -137,12 +230,14 @@
             transform: translateX(-50%);
             width: 40px;
             height: 3px;
-            background: linear-gradient(90deg, #00d4ff, #ff00ff);
+            background: linear-gradient(90deg, #10b981, #22d3ee);
             border-radius: 0 0 3px 3px;
+            box-shadow: 0 0 10px rgba(16, 185, 129, 0.5);
         }
 
         .nav-icon {
             font-size: 26px;
+            filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
         }
 
         .nav-label {
@@ -164,21 +259,47 @@
 
         .section.active {
             display: block;
-            animation: fadeIn 0.5s ease;
+            animation: slideIn 0.5s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
+        @keyframes slideIn {
+            from { 
+                opacity: 0; 
+                transform: translateY(30px);
+            }
+            to { 
+                opacity: 1; 
+                transform: translateY(0);
+            }
         }
 
         .game-section {
-            background: rgba(255, 255, 255, 0.03);
-            border-radius: 20px;
+            background: rgba(15, 23, 42, 0.4);
+            backdrop-filter: blur(20px) saturate(180%);
+            -webkit-backdrop-filter: blur(20px) saturate(180%);
+            border-radius: 24px;
             padding: 40px;
-            backdrop-filter: blur(20px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(16, 185, 129, 0.2);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3),
+                        inset 0 1px 0 rgba(255, 255, 255, 0.05);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .game-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(16, 185, 129, 0.5), transparent);
+            animation: shimmer 3s ease-in-out infinite;
+        }
+
+        @keyframes shimmer {
+            0%, 100% { opacity: 0; }
+            50% { opacity: 1; }
         }
 
         .game-title {
@@ -186,9 +307,10 @@
             margin-bottom: 30px;
             text-align: center;
             font-weight: 800;
-            background: linear-gradient(90deg, #00d4ff, #ff00ff);
+            background: linear-gradient(90deg, #10b981, #22d3ee);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
+            filter: drop-shadow(0 0 20px rgba(16, 185, 129, 0.3));
         }
 
         .dice-game {
@@ -201,22 +323,42 @@
         .dice-display {
             width: 180px;
             height: 180px;
-            background: linear-gradient(135deg, #00d4ff, #0099ff, #ff00ff);
-            border-radius: 25px;
+            background: linear-gradient(135deg, #10b981, #22d3ee);
+            border-radius: 30px;
             display: flex;
             align-items: center;
             justify-content: center;
             font-size: 90px;
             font-weight: 900;
-            box-shadow: 0 15px 50px rgba(0, 212, 255, 0.4),
-                        0 0 100px rgba(255, 0, 255, 0.2);
-            animation: pulse 2s ease-in-out infinite;
-            border: 3px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 20px 60px rgba(16, 185, 129, 0.4),
+                        0 0 0 1px rgba(255, 255, 255, 0.1) inset,
+                        0 0 80px rgba(34, 211, 238, 0.3);
+            animation: float 3s ease-in-out infinite;
+            position: relative;
         }
 
-        @keyframes pulse {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.05); }
+        .dice-display::before {
+            content: '';
+            position: absolute;
+            inset: -2px;
+            border-radius: 30px;
+            padding: 2px;
+            background: linear-gradient(135deg, #10b981, #22d3ee, #3b82f6);
+            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor;
+            mask-composite: exclude;
+            opacity: 0.5;
+            animation: rotate 4s linear infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-10px) rotate(5deg); }
+        }
+
+        @keyframes rotate {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
         }
 
         .bet-controls {
@@ -231,27 +373,32 @@
         .control-label {
             display: block;
             margin-bottom: 10px;
-            color: #aaa;
+            color: #94a3b8;
             font-weight: 600;
             font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
         }
 
         .control-input {
             width: 100%;
             padding: 14px;
-            background: rgba(255, 255, 255, 0.05);
-            border: 2px solid rgba(0, 212, 255, 0.3);
-            border-radius: 10px;
+            background: rgba(15, 23, 42, 0.5);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(16, 185, 129, 0.3);
+            border-radius: 12px;
             color: #fff;
             font-size: 16px;
-            transition: all 0.3s;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.2);
         }
 
         .control-input:focus {
             outline: none;
-            border-color: #00d4ff;
-            box-shadow: 0 0 20px rgba(0, 212, 255, 0.3);
-            background: rgba(255, 255, 255, 0.08);
+            border-color: #10b981;
+            box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.2),
+                        inset 0 2px 4px rgba(0, 0, 0, 0.2);
+            background: rgba(15, 23, 42, 0.7);
         }
 
         .bet-amount-buttons {
@@ -263,42 +410,69 @@
 
         .amount-btn {
             padding: 12px;
-            background: rgba(255, 255, 255, 0.05);
-            border: 2px solid rgba(0, 212, 255, 0.3);
-            border-radius: 8px;
-            color: #fff;
+            background: rgba(16, 185, 129, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(16, 185, 129, 0.3);
+            border-radius: 10px;
+            color: #10b981;
             cursor: pointer;
-            transition: all 0.3s;
-            font-weight: 600;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            font-weight: 700;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1),
+                        inset 0 1px 0 rgba(255, 255, 255, 0.05);
         }
 
         .amount-btn:hover {
-            background: linear-gradient(135deg, rgba(0, 212, 255, 0.2), rgba(255, 0, 255, 0.2));
-            border-color: #00d4ff;
+            background: rgba(16, 185, 129, 0.2);
+            border-color: #10b981;
             transform: translateY(-2px);
-            box-shadow: 0 4px 15px rgba(0, 212, 255, 0.3);
+            box-shadow: 0 8px 20px rgba(16, 185, 129, 0.3),
+                        inset 0 1px 0 rgba(255, 255, 255, 0.1);
+        }
+
+        .amount-btn:active {
+            transform: translateY(0);
         }
 
         .roll-btn {
             width: 100%;
             padding: 20px;
-            background: linear-gradient(135deg, #00d4ff, #0099ff, #ff00ff);
+            background: linear-gradient(135deg, #10b981, #22d3ee);
             border: none;
-            border-radius: 12px;
+            border-radius: 16px;
             color: #fff;
             font-size: 20px;
             font-weight: 900;
             cursor: pointer;
-            transition: all 0.3s;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             margin-top: 25px;
-            box-shadow: 0 10px 30px rgba(0, 212, 255, 0.4);
+            box-shadow: 0 12px 40px rgba(16, 185, 129, 0.4),
+                        inset 0 1px 0 rgba(255, 255, 255, 0.2);
             text-transform: uppercase;
             letter-spacing: 2px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .roll-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            transition: left 0.5s;
+        }
+
+        .roll-btn:hover::before {
+            left: 100%;
         }
 
         .roll-btn:hover:not(:disabled) {
             transform: translateY(-3px);
-            box-shadow: 0 15px 40px rgba(0, 212, 255, 0.6);
+            box-shadow: 0 16px 50px rgba(16, 185, 129, 0.5),
+                        inset 0 1px 0 rgba(255, 255, 255, 0.3);
         }
 
         .roll-btn:active:not(:disabled) {
@@ -313,27 +487,31 @@
         .result-message {
             text-align: center;
             padding: 20px;
-            border-radius: 12px;
+            border-radius: 16px;
             margin-top: 20px;
             font-weight: 800;
             display: none;
             font-size: 18px;
+            backdrop-filter: blur(10px);
+            animation: slideIn 0.5s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         .result-message.win {
-            background: rgba(0, 255, 0, 0.15);
-            border: 2px solid #0f0;
-            color: #0f0;
+            background: rgba(16, 185, 129, 0.2);
+            border: 1px solid #10b981;
+            color: #10b981;
             display: block;
-            box-shadow: 0 8px 30px rgba(0, 255, 0, 0.3);
+            box-shadow: 0 8px 30px rgba(16, 185, 129, 0.3),
+                        inset 0 1px 0 rgba(255, 255, 255, 0.1);
         }
 
         .result-message.lose {
-            background: rgba(255, 0, 0, 0.15);
-            border: 2px solid #f00;
-            color: #f00;
+            background: rgba(239, 68, 68, 0.2);
+            border: 1px solid #ef4444;
+            color: #ef4444;
             display: block;
-            box-shadow: 0 8px 30px rgba(255, 0, 0, 0.3);
+            box-shadow: 0 8px 30px rgba(239, 68, 68, 0.3),
+                        inset 0 1px 0 rgba(255, 255, 255, 0.1);
         }
 
         .modal {
@@ -343,11 +521,11 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0, 0, 0, 0.9);
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(10px);
             z-index: 1000;
             align-items: center;
             justify-content: center;
-            backdrop-filter: blur(10px);
         }
 
         .modal.active {
@@ -355,17 +533,36 @@
             animation: fadeIn 0.3s ease;
         }
 
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
         .modal-content {
-            background: linear-gradient(135deg, #1a1a3e, #0f0f23);
+            background: rgba(15, 23, 42, 0.95);
+            backdrop-filter: blur(20px) saturate(180%);
+            -webkit-backdrop-filter: blur(20px) saturate(180%);
             padding: 40px;
-            border-radius: 20px;
+            border-radius: 24px;
             max-width: 500px;
             width: 90%;
-            border: 2px solid transparent;
-            border-image: linear-gradient(135deg, #00d4ff, #ff00ff) 1;
+            border: 1px solid rgba(16, 185, 129, 0.3);
             max-height: 90vh;
             overflow-y: auto;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5),
+                        inset 0 1px 0 rgba(255, 255, 255, 0.05);
+            animation: modalSlideIn 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        @keyframes modalSlideIn {
+            from {
+                opacity: 0;
+                transform: scale(0.9) translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1) translateY(0);
+            }
         }
 
         .modal-title {
@@ -373,9 +570,10 @@
             margin-bottom: 30px;
             text-align: center;
             font-weight: 900;
-            background: linear-gradient(90deg, #00d4ff, #ff00ff);
+            background: linear-gradient(90deg, #10b981, #22d3ee);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
+            filter: drop-shadow(0 0 20px rgba(16, 185, 129, 0.3));
         }
 
         .payment-methods {
@@ -387,54 +585,64 @@
 
         .payment-method {
             padding: 20px;
-            background: rgba(255, 255, 255, 0.03);
-            border: 2px solid rgba(255, 255, 255, 0.1);
-            border-radius: 12px;
+            background: rgba(16, 185, 129, 0.05);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(16, 185, 129, 0.2);
+            border-radius: 16px;
             cursor: pointer;
-            transition: all 0.3s;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             text-align: center;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1),
+                        inset 0 1px 0 rgba(255, 255, 255, 0.03);
         }
 
         .payment-method:hover {
-            border-color: #00d4ff;
-            background: rgba(0, 212, 255, 0.1);
+            border-color: #10b981;
+            background: rgba(16, 185, 129, 0.1);
             transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(16, 185, 129, 0.2),
+                        inset 0 1px 0 rgba(255, 255, 255, 0.05);
         }
 
         .payment-method.selected {
-            border-color: #00d4ff;
-            background: linear-gradient(135deg, rgba(0, 212, 255, 0.15), rgba(255, 0, 255, 0.15));
-            box-shadow: 0 8px 25px rgba(0, 212, 255, 0.3);
+            border-color: #10b981;
+            background: rgba(16, 185, 129, 0.15);
+            box-shadow: 0 8px 25px rgba(16, 185, 129, 0.3),
+                        inset 0 1px 0 rgba(255, 255, 255, 0.1),
+                        0 0 0 3px rgba(16, 185, 129, 0.2);
         }
 
         .payment-method-icon {
             font-size: 35px;
             margin-bottom: 10px;
+            filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
         }
 
         .close-modal {
-            background: rgba(255, 255, 255, 0.05);
-            border: 2px solid rgba(255, 255, 255, 0.3);
+            background: rgba(16, 185, 129, 0.05);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(16, 185, 129, 0.3);
             padding: 12px 20px;
-            border-radius: 10px;
+            border-radius: 12px;
             color: #fff;
             cursor: pointer;
             width: 100%;
             margin-top: 15px;
             font-weight: 600;
-            transition: all 0.3s;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         .close-modal:hover {
-            background: rgba(255, 255, 255, 0.1);
-            border-color: #00d4ff;
+            background: rgba(16, 185, 129, 0.1);
+            border-color: #10b981;
+            transform: translateY(-2px);
         }
 
         .confirm-btn {
-            background: linear-gradient(135deg, #00d4ff, #0099ff, #ff00ff);
+            background: linear-gradient(135deg, #10b981, #22d3ee);
             border: none;
             padding: 16px;
-            border-radius: 10px;
+            border-radius: 12px;
             color: #fff;
             font-weight: 900;
             cursor: pointer;
@@ -442,64 +650,92 @@
             font-size: 16px;
             text-transform: uppercase;
             letter-spacing: 1px;
-            box-shadow: 0 8px 25px rgba(0, 212, 255, 0.4);
-            transition: all 0.3s;
+            box-shadow: 0 8px 25px rgba(16, 185, 129, 0.4),
+                        inset 0 1px 0 rgba(255, 255, 255, 0.2);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .confirm-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            transition: left 0.5s;
+        }
+
+        .confirm-btn:hover::before {
+            left: 100%;
         }
 
         .confirm-btn:hover {
             transform: translateY(-2px);
-            box-shadow: 0 12px 35px rgba(0, 212, 255, 0.6);
+            box-shadow: 0 12px 35px rgba(16, 185, 129, 0.5),
+                        inset 0 1px 0 rgba(255, 255, 255, 0.3);
         }
 
         .history {
             margin-top: 30px;
-            background: rgba(255, 255, 255, 0.02);
-            border-radius: 15px;
+            background: rgba(15, 23, 42, 0.4);
+            backdrop-filter: blur(20px) saturate(180%);
+            -webkit-backdrop-filter: blur(20px) saturate(180%);
+            border-radius: 20px;
             padding: 25px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(16, 185, 129, 0.2);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2),
+                        inset 0 1px 0 rgba(255, 255, 255, 0.05);
         }
 
         .history-title {
             margin-bottom: 20px;
             font-size: 20px;
             font-weight: 800;
-            background: linear-gradient(90deg, #00d4ff, #ff00ff);
+            background: linear-gradient(90deg, #10b981, #22d3ee);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
         }
 
         .history-item {
             padding: 15px;
-            background: rgba(255, 255, 255, 0.03);
-            border-radius: 10px;
+            background: rgba(16, 185, 129, 0.05);
+            backdrop-filter: blur(10px);
+            border-radius: 12px;
             margin-bottom: 10px;
             display: flex;
             justify-content: space-between;
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            transition: all 0.3s;
+            border: 1px solid rgba(16, 185, 129, 0.1);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         .history-item:hover {
-            background: rgba(255, 255, 255, 0.05);
-            border-color: rgba(0, 212, 255, 0.3);
+            background: rgba(16, 185, 129, 0.1);
+            border-color: rgba(16, 185, 129, 0.3);
+            transform: translateX(5px);
         }
 
         .transaction-status {
             padding: 4px 12px;
-            border-radius: 6px;
+            border-radius: 8px;
             font-size: 11px;
             font-weight: 700;
             text-transform: uppercase;
+            backdrop-filter: blur(10px);
         }
 
         .status-completed {
-            background: rgba(0, 255, 0, 0.2);
-            color: #0f0;
+            background: rgba(16, 185, 129, 0.2);
+            color: #10b981;
+            border: 1px solid rgba(16, 185, 129, 0.3);
         }
 
         .status-pending {
-            background: rgba(255, 165, 0, 0.2);
-            color: #ffa500;
+            background: rgba(251, 191, 36, 0.2);
+            color: #fbbf24;
+            border: 1px solid rgba(251, 191, 36, 0.3);
         }
 
         .loading-screen {
@@ -509,7 +745,8 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0, 0, 0, 0.95);
+            background: rgba(10, 25, 47, 0.95);
+            backdrop-filter: blur(10px);
             z-index: 2000;
             align-items: center;
             justify-content: center;
@@ -528,11 +765,12 @@
         .loading-spinner {
             width: 80px;
             height: 80px;
-            border: 5px solid rgba(0, 212, 255, 0.2);
-            border-top: 5px solid #00d4ff;
+            border: 5px solid rgba(16, 185, 129, 0.2);
+            border-top: 5px solid #10b981;
             border-radius: 50%;
             animation: spin 1s linear infinite;
             margin: 0 auto 30px;
+            box-shadow: 0 0 30px rgba(16, 185, 129, 0.3);
         }
 
         @keyframes spin {
@@ -543,12 +781,13 @@
         .loading-text {
             font-size: 22px;
             margin-bottom: 15px;
-            color: #00d4ff;
+            color: #10b981;
             font-weight: 800;
+            filter: drop-shadow(0 0 10px rgba(16, 185, 129, 0.3));
         }
 
         .loading-subtext {
-            color: #aaa;
+            color: #94a3b8;
             font-size: 14px;
             margin-bottom: 20px;
         }
@@ -557,8 +796,10 @@
             text-align: left;
             margin-top: 30px;
             padding: 20px;
-            background: rgba(255, 255, 255, 0.03);
-            border-radius: 12px;
+            background: rgba(16, 185, 129, 0.05);
+            backdrop-filter: blur(10px);
+            border-radius: 16px;
+            border: 1px solid rgba(16, 185, 129, 0.2);
         }
 
         .step {
@@ -566,33 +807,38 @@
             align-items: center;
             gap: 15px;
             padding: 10px 0;
-            color: #666;
-            transition: all 0.3s;
+            color: #475569;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         .step.active {
-            color: #00d4ff;
+            color: #10b981;
+            transform: translateX(5px);
         }
 
         .step.completed {
-            color: #0f0;
+            color: #22d3ee;
         }
 
         .step-icon {
             font-size: 22px;
+            filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
         }
 
         .transaction-code-display {
-            background: rgba(0, 212, 255, 0.1);
-            border: 2px solid #00d4ff;
+            background: rgba(16, 185, 129, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid #10b981;
             padding: 20px;
-            border-radius: 12px;
+            border-radius: 16px;
             margin-top: 20px;
+            box-shadow: 0 8px 25px rgba(16, 185, 129, 0.2),
+                        inset 0 1px 0 rgba(255, 255, 255, 0.05);
         }
 
         .transaction-code-label {
             font-size: 12px;
-            color: #aaa;
+            color: #94a3b8;
             margin-bottom: 8px;
             text-transform: uppercase;
             letter-spacing: 1px;
@@ -601,29 +847,31 @@
         .transaction-code {
             font-size: 20px;
             font-weight: 900;
-            color: #00d4ff;
+            color: #10b981;
             font-family: 'Courier New', monospace;
             letter-spacing: 3px;
+            filter: drop-shadow(0 0 10px rgba(16, 185, 129, 0.3));
         }
 
         .success-checkmark {
             width: 100px;
             height: 100px;
             margin: 0 auto 20px;
-            border: 5px solid #0f0;
+            border: 5px solid #10b981;
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
             font-size: 60px;
-            color: #0f0;
-            animation: scaleIn 0.5s ease;
+            color: #10b981;
+            animation: scaleIn 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 0 40px rgba(16, 185, 129, 0.4);
         }
 
         @keyframes scaleIn {
-            0% { transform: scale(0); }
-            50% { transform: scale(1.1); }
-            100% { transform: scale(1); }
+            0% { transform: scale(0) rotate(-180deg); }
+            50% { transform: scale(1.1) rotate(0deg); }
+            100% { transform: scale(1) rotate(0deg); }
         }
 
         .wallet-overview {
@@ -634,27 +882,40 @@
         }
 
         .wallet-card {
-            background: rgba(255, 255, 255, 0.03);
-            border-radius: 15px;
+            background: rgba(16, 185, 129, 0.05);
+            backdrop-filter: blur(20px) saturate(180%);
+            -webkit-backdrop-filter: blur(20px) saturate(180%);
+            border-radius: 20px;
             padding: 25px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(10px);
+            border: 1px solid rgba(16, 185, 129, 0.2);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2),
+                        inset 0 1px 0 rgba(255, 255, 255, 0.05);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .wallet-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 40px rgba(16, 185, 129, 0.3),
+                        inset 0 1px 0 rgba(255, 255, 255, 0.1);
+            border-color: rgba(16, 185, 129, 0.4);
         }
 
         .wallet-card-title {
             font-size: 14px;
-            color: #aaa;
+            color: #94a3b8;
             margin-bottom: 10px;
             text-transform: uppercase;
             letter-spacing: 1px;
+            font-weight: 600;
         }
 
         .wallet-card-value {
             font-size: 28px;
             font-weight: 900;
-            background: linear-gradient(90deg, #00d4ff, #00ff88);
+            background: linear-gradient(90deg, #10b981, #22d3ee);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
+            filter: drop-shadow(0 0 10px rgba(16, 185, 129, 0.3));
         }
 
         .wallet-actions {
@@ -666,29 +927,56 @@
 
         .wallet-action-btn {
             padding: 15px;
-            background: linear-gradient(135deg, rgba(0, 212, 255, 0.2), rgba(255, 0, 255, 0.2));
-            border: 2px solid rgba(0, 212, 255, 0.3);
-            border-radius: 10px;
-            color: #fff;
+            background: rgba(16, 185, 129, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(16, 185, 129, 0.3);
+            border-radius: 16px;
+            color: #10b981;
             font-weight: 700;
             cursor: pointer;
-            transition: all 0.3s;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             text-align: center;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1),
+                        inset 0 1px 0 rgba(255, 255, 255, 0.05);
         }
 
         .wallet-action-btn:hover {
             transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(0, 212, 255, 0.4);
-            border-color: #00d4ff;
+            box-shadow: 0 8px 25px rgba(16, 185, 129, 0.3),
+                        inset 0 1px 0 rgba(255, 255, 255, 0.1);
+            border-color: #10b981;
+            background: rgba(16, 185, 129, 0.15);
+        }
+
+        /* Scrollbar styling */
+        ::-webkit-scrollbar {
+            width: 10px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: rgba(15, 23, 42, 0.5);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: linear-gradient(135deg, #10b981, #22d3ee);
+            border-radius: 10px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: linear-gradient(135deg, #22d3ee, #10b981);
         }
     </style>
 </head>
 <body>
+    <div class="orb orb1"></div>
+    <div class="orb orb2"></div>
+    <div class="orb orb3"></div>
+
     <div class="header">
         <div class="logo">🎰 GreatStake</div>
         <div class="balance-container">
             <div class="balance">
-                <div style="font-size: 12px; color: #aaa; font-weight: 600;">Balance</div>
+                <div style="font-size: 12px; color: #94a3b8; font-weight: 600;">Balance</div>
                 <div class="balance-amount">$<span id="balance">1000.00</span></div>
             </div>
         </div>
@@ -755,9 +1043,7 @@
                     
                     <div class="wallet-card">
                         <div class="wallet-card-title">Total Winnings</div>
-                        <div class="wallet-card-value" style="background: linear-gradient(90deg, #00ff88, #00d4ff); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">
-                            $<span id="totalWinnings">0.00</span>
-                        </div>
+                        <div class="wallet-card-value">$<span id="totalWinnings">0.00</span></div>
                     </div>
                 </div>
 
@@ -975,7 +1261,10 @@
             });
             
             // Add active to clicked nav item
-            document.querySelector(`[data-tab="${tab}"]`).classList.add('active');
+            const clickedItem = document.querySelector(`[data-tab="${tab}"]`);
+            if (clickedItem) {
+                clickedItem.classList.add('active');
+            }
             
             // Hide all sections
             document.querySelectorAll('.section').forEach(section => {
@@ -1036,7 +1325,7 @@
             const loadingContent = document.getElementById('loadingContent');
             loadingContent.innerHTML = `
                 <div class="success-checkmark">✓</div>
-                <div class="loading-text" style="color: #0f0;">Deposit Successful!</div>
+                <div class="loading-text" style="color: #10b981;">Deposit Successful!</div>
                 <div class="loading-subtext">Your funds have been added to your account</div>
                 
                 <div class="transaction-code-display">
@@ -1044,22 +1333,22 @@
                     <div class="transaction-code">${transactionCode}</div>
                 </div>
 
-                <div style="margin-top: 20px; padding: 15px; background: rgba(255,255,255,0.05); border-radius: 8px;">
+                <div style="margin-top: 20px; padding: 15px; background: rgba(16, 185, 129, 0.05); backdrop-filter: blur(10px); border-radius: 12px; border: 1px solid rgba(16, 185, 129, 0.2);">
                     <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
-                        <span style="color: #aaa;">Amount:</span>
-                        <span style="color: #0f0; font-weight: bold;">+$${amount.toFixed(2)}</span>
+                        <span style="color: #94a3b8;">Amount:</span>
+                        <span style="color: #10b981; font-weight: bold;">+$${amount.toFixed(2)}</span>
                     </div>
                     <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
-                        <span style="color: #aaa;">Method:</span>
+                        <span style="color: #94a3b8;">Method:</span>
                         <span>${selectedPaymentMethod.toUpperCase()}</span>
                     </div>
                     <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
-                        <span style="color: #aaa;">Status:</span>
-                        <span style="color: #0f0;">Completed</span>
+                        <span style="color: #94a3b8;">Status:</span>
+                        <span style="color: #10b981;">Completed</span>
                     </div>
                     <div style="display: flex; justify-content: space-between;">
-                        <span style="color: #aaa;">New Balance:</span>
-                        <span style="color: #00d4ff; font-weight: bold;">$${(balance + amount).toFixed(2)}</span>
+                        <span style="color: #94a3b8;">New Balance:</span>
+                        <span style="color: #22d3ee; font-weight: bold;">$${(balance + amount).toFixed(2)}</span>
                     </div>
                 </div>
 
@@ -1126,7 +1415,7 @@
             const loadingContent = document.getElementById('loadingContent');
             loadingContent.innerHTML = `
                 <div class="success-checkmark">✓</div>
-                <div class="loading-text" style="color: #ffa500;">Withdrawal Initiated!</div>
+                <div class="loading-text" style="color: #fbbf24;">Withdrawal Initiated!</div>
                 <div class="loading-subtext">Your withdrawal is being processed</div>
                 
                 <div class="transaction-code-display">
@@ -1134,22 +1423,22 @@
                     <div class="transaction-code">${transactionCode}</div>
                 </div>
 
-                <div style="margin-top: 20px; padding: 15px; background: rgba(255,255,255,0.05); border-radius: 8px;">
+                <div style="margin-top: 20px; padding: 15px; background: rgba(16, 185, 129, 0.05); backdrop-filter: blur(10px); border-radius: 12px; border: 1px solid rgba(16, 185, 129, 0.2);">
                     <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
-                        <span style="color: #aaa;">Amount:</span>
-                        <span style="color: #f00; font-weight: bold;">-$${amount.toFixed(2)}</span>
+                        <span style="color: #94a3b8;">Amount:</span>
+                        <span style="color: #ef4444; font-weight: bold;">-$${amount.toFixed(2)}</span>
                     </div>
                     <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
-                        <span style="color: #aaa;">Method:</span>
+                        <span style="color: #94a3b8;">Method:</span>
                         <span>${selectedPaymentMethod.toUpperCase()}</span>
                     </div>
                     <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
-                        <span style="color: #aaa;">Status:</span>
-                        <span style="color: #ffa500;">Processing (1-3 business days)</span>
+                        <span style="color: #94a3b8;">Status:</span>
+                        <span style="color: #fbbf24;">Processing (1-3 business days)</span>
                     </div>
                     <div style="display: flex; justify-content: space-between;">
-                        <span style="color: #aaa;">New Balance:</span>
-                        <span style="color: #00d4ff; font-weight: bold;">$${(balance - amount).toFixed(2)}</span>
+                        <span style="color: #94a3b8;">New Balance:</span>
+                        <span style="color: #22d3ee; font-weight: bold;">$${(balance - amount).toFixed(2)}</span>
                     </div>
                 </div>
 
@@ -1280,7 +1569,7 @@
         function updateTransactionHistory() {
             const historyDiv = document.getElementById('transactionHistory');
             if (transactions.length === 0) {
-                historyDiv.innerHTML = '<div style="text-align: center; color: #666; padding: 20px;">No transactions yet</div>';
+                historyDiv.innerHTML = '<div style="text-align: center; color: #475569; padding: 20px;">No transactions yet</div>';
                 return;
             }
             
@@ -1290,11 +1579,11 @@
                 <div class="history-item">
                     <div>
                         <div style="font-weight: bold;">${t.type}</div>
-                        <div style="font-size: 11px; color: #666; font-family: monospace;">${t.code}</div>
-                        <div style="font-size: 12px; color: #888;">${t.time} • ${t.method}</div>
+                        <div style="font-size: 11px; color: #475569; font-family: monospace;">${t.code}</div>
+                        <div style="font-size: 12px; color: #64748b;">${t.time} • ${t.method}</div>
                     </div>
                     <div style="text-align: right;">
-                        <div style="font-weight: bold; color: ${t.amount > 0 ? '#0f0' : '#f00'};">
+                        <div style="font-weight: bold; color: ${t.amount > 0 ? '#10b981' : '#ef4444'};">
                             ${t.amount > 0 ? '+' : ''}$${Math.abs(t.amount).toFixed(2)}
                         </div>
                         <span class="transaction-status status-${t.status}">${t.status}</span>
@@ -1306,7 +1595,7 @@
         function updateWalletHistory() {
             const historyDiv = document.getElementById('walletHistory');
             if (transactions.length === 0) {
-                historyDiv.innerHTML = '<div style="text-align: center; color: #666; padding: 20px;">No transactions yet</div>';
+                historyDiv.innerHTML = '<div style="text-align: center; color: #475569; padding: 20px;">No transactions yet</div>';
                 return;
             }
             
@@ -1314,11 +1603,11 @@
                 <div class="history-item">
                     <div>
                         <div style="font-weight: bold;">${t.type}</div>
-                        <div style="font-size: 11px; color: #666; font-family: monospace;">${t.code}</div>
-                        <div style="font-size: 12px; color: #888;">${t.time} • ${t.method}</div>
+                        <div style="font-size: 11px; color: #475569; font-family: monospace;">${t.code}</div>
+                        <div style="font-size: 12px; color: #64748b;">${t.time} • ${t.method}</div>
                     </div>
                     <div style="text-align: right;">
-                        <div style="font-weight: bold; color: ${t.amount > 0 ? '#0f0' : '#f00'};">
+                        <div style="font-weight: bold; color: ${t.amount > 0 ? '#10b981' : '#ef4444'};">
                             ${t.amount > 0 ? '+' : ''}$${Math.abs(t.amount).toFixed(2)}
                         </div>
                         <span class="transaction-status status-${t.status}">${t.status}</span>
